@@ -2,17 +2,15 @@ const TelegramApi = require('node-telegram-bot-api');
 const token = '5869805416:AAEeqaiPPunq-rt4of8-T57SY7rHDsh_8WM';
 const bot = new TelegramApi(token, {polling: true}); 
 const axios = require('axios');
-CHAT_ID = "-785368621";
+CHAT_ID = "423871593";
 const uri_api = `https://api.telegram.org/bot${ token }/sendMessage`;
-
-let powerStatus = false;
 
 let chatId;
 
-var ping = require('ping');
+let ping = require('ping');
 
-var host1 = ['176.38.76.32'];
-var host2 = ['89.209.44.201'];
+let host1 = ['176.38.76.32'];
+let host2 = ['89.209.44.201'];
 
 const result = async () => {
     let host;
@@ -46,12 +44,12 @@ const result = async () => {
                 console.log('value.alive', value.alive);
                 console.log('inputStatus', inputStatus);
                 if (value.alive !== inputStatus && inputStatus === false) {
-                    bot.sendMessage(chatId, `Свет выключили ${new Date()}`);
+                    bot.sendMessage(CHAT_ID, `Свет выключили ${new Date()}`);
                     console.log(`Свет выключили ${new Date()}`);
                     inputStatus = value.alive;
                 }
                 if (value.alive !== inputStatus && inputStatus === true) {
-                    bot.sendMessage(chatId, `Свет включили ${new Date()}`);
+                    bot.sendMessage(CHAT_ID, `Свет включили ${new Date()}`);
                     console.log(`Свет включили ${new Date()}`);
                     inputStatus = value.alive;
                     console.log(value.alive);
@@ -60,7 +58,7 @@ const result = async () => {
             }, reason => {
             console.log(reason);
           });
-    }, 2000);
+    }, 5000);
 }
 result();
 
@@ -108,6 +106,7 @@ let FIO;
     bot.on('message', async msg => {
         const text = msg.text;
         chatId = msg.chat.id;
+        console.log(chatId);
     
 //Itaration ONE
         if(text === '/start') {

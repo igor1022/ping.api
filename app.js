@@ -11,43 +11,58 @@ let chatId;
 
 var ping = require('ping');
 
-var host = ['176.38.76.32'];
+var host1 = ['176.38.76.32'];
+var host2 = ['89.209.44.201'];
 
-const result = async (host) => {
+const result = async () => {
+    let host;
+    const rnd = Math.random();
+    if (rnd < 0.5) {
+        host = host1;
+    } else {
+        host = host2;
+    }
     let res;
     let inputStatus;
+    
     res = await ping.promise.probe(host);
     inputStatus = res.alive;
-
-    if (res.alive) {
+    console.log(inputStatus);
+    if (inputStatus) {
         console.log('Свет есть');
     } else {
         console.log('Света нет');
     }
 
     setInterval(() => {
+        const rnd1 = Math.random();
+        if (rnd1 < 0.5) {
+            host = host1;
+        } else {
+            host = host2;
+        }
         res = ping.promise.probe(host);
         res.then(value => {
-            console.log(value.alive);
-            if (value.alive !== inputStatus && inputStatus === false) {
-                bot.sendMessage(chatId, `Свет выключили ${new Date()}`);
-                console.log(`Свет выключили ${new Date()}`);
+                console.log('value.alive', value.alive);
+                console.log('inputStatus', inputStatus);
+                if (value.alive !== inputStatus && inputStatus === false) {
+                    bot.sendMessage(chatId, `Свет выключили ${new Date()}`);
+                    console.log(`Свет выключили ${new Date()}`);
+                    inputStatus = value.alive;
+                }
+                if (value.alive !== inputStatus && inputStatus === true) {
+                    bot.sendMessage(chatId, `Свет включили ${new Date()}`);
+                    console.log(`Свет включили ${new Date()}`);
+                    inputStatus = value.alive;
+                    console.log(value.alive);
+                }
                 inputStatus = value.alive;
-                console.log(value.alive);
-            }
-            if (value.alive !== inputStatus && inputStatus === true) {
-                bot.sendMessage(chatId, `Свет включили ${new Date()}`);
-                console.log(`Свет включили ${new Date()}`);
-                inputStatus = value.alive;
-                console.log(value.alive);
-            }
             }, reason => {
             console.log(reason);
           });
-        inputStatus = res.alive;
     }, 2000);
 }
-result(host);
+result();
 
 /*
 setInterval(() => {
